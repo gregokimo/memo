@@ -1,0 +1,180 @@
+@import "tailwindcss";
+
+/*
+ * 디자인 토큰 (CLAUDE.md와 같은 이름)
+ * 토큰 이름의 "/"는 "-"로 바꿔 씁니다.
+ *   color/primary      → bg-primary, text-primary
+ *   surface/page       → bg-surface-page
+ *   text/secondary     → text-text-secondary
+ *   border/default     → border-border-default
+ *   label/blue-soft    → bg-label-blue-soft
+ *   space/16           → p-16, gap-16, mt-16 …
+ *   size/36            → h-size-36, size-size-44 …
+ *   border/focus       → focus-ring (고른 것·입력 중인 칸의 파란 안쪽 테두리)
+ *   radius/md          → rounded-md
+ *   heading/xl         → text-heading-xl (크기·줄 높이·자간·굵기 한 번에)
+ * CSS에서는 var(--color-primary), var(--spacing-16), var(--radius-md)처럼 씁니다.
+ * Tailwind 기본 색·간격·모서리·글자 크기는 꺼 두어 토큰 밖의 값은 쓸 수 없습니다.
+ */
+@theme {
+  /* 색 (Light) — Dark 값은 아래 미디어 쿼리에서 바꿉니다 */
+  --color-*: initial;
+  --color-primary: #3182f6;
+  --color-surface-page: #f2f4f6;
+  --color-surface-card: #ffffff;
+  --color-text-primary: #191f28;
+  --color-text-secondary: #4e5968;
+  --color-text-muted: #8b95a1;
+  --color-text-on-primary: #ffffff;
+  --color-border-default: #e5e8eb;
+  --color-label-blue: #3182f6;
+  --color-label-blue-soft: #e8f3ff;
+  --color-label-green: #12a150;
+  --color-label-green-soft: #e3f8ec;
+  --color-label-orange: #f76808;
+  --color-label-orange-soft: #fff1e5;
+  --color-label-pink: #e5397a;
+  --color-label-pink-soft: #ffeaf1;
+
+  /* 간격 */
+  --spacing-*: initial;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-34: 34px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+
+  /* 크기 — h-size-36, size-size-44처럼 씁니다 */
+  --spacing-size-16: 16px;
+  --spacing-size-20: 20px;
+  --spacing-size-22: 22px;
+  --spacing-size-24: 24px;
+  --spacing-size-32: 32px;
+  --spacing-size-36: 36px;
+  --spacing-size-40: 40px;
+  --spacing-size-44: 44px;
+
+  /* 모서리 */
+  --radius-*: initial;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-full: 999px;
+
+  /* 글꼴 */
+  --font-sans: var(--font-noto-sans-kr), sans-serif;
+
+  /* 텍스트 스타일 */
+  --text-*: initial;
+  --text-heading-xl: 28px;
+  --text-heading-xl--line-height: 38px;
+  --text-heading-xl--letter-spacing: -0.8px;
+  --text-heading-xl--font-weight: 700;
+
+  --text-heading-lg: 26px;
+  --text-heading-lg--line-height: 36px;
+  --text-heading-lg--letter-spacing: -0.8px;
+  --text-heading-lg--font-weight: 700;
+
+  --text-title-lg: 20px;
+  --text-title-lg--line-height: 28px;
+  --text-title-lg--letter-spacing: -0.4px;
+  --text-title-lg--font-weight: 700;
+
+  --text-title-md: 17px;
+  --text-title-md--line-height: 24px;
+  --text-title-md--letter-spacing: -0.3px;
+  --text-title-md--font-weight: 700;
+
+  --text-label-md: 15px;
+  --text-label-md--line-height: 22px;
+  --text-label-md--letter-spacing: -0.2px;
+  --text-label-md--font-weight: 700;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 28px;
+  --text-body-md--letter-spacing: -0.2px;
+  --text-body-md--font-weight: 400;
+
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 20px;
+  --text-body-sm--letter-spacing: -0.1px;
+  --text-body-sm--font-weight: 400;
+
+  --text-caption-md: 15px;
+  --text-caption-md--line-height: 22px;
+  --text-caption-md--letter-spacing: -0.2px;
+  --text-caption-md--font-weight: 500;
+
+  --text-caption-sm: 13px;
+  --text-caption-sm--line-height: 18px;
+  --text-caption-sm--letter-spacing: 0;
+  --text-caption-sm--font-weight: 500;
+
+  --text-button-md: 17px;
+  --text-button-md--line-height: 24px;
+  --text-button-md--letter-spacing: -0.2px;
+  --text-button-md--font-weight: 700;
+}
+
+/* 색 (Dark) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: #4d94ff;
+    --color-surface-page: #101014;
+    --color-surface-card: #1c1c22;
+    --color-text-primary: #f1f3f5;
+    --color-text-secondary: #b3bac2;
+    --color-text-muted: #6e7783;
+    --color-text-on-primary: #ffffff;
+    --color-border-default: #2a2a33;
+    --color-label-blue: #6aa6ff;
+    --color-label-blue-soft: #1d2a40;
+    --color-label-green: #3ccb7f;
+    --color-label-green-soft: #17302a;
+    --color-label-orange: #ff9446;
+    --color-label-orange-soft: #3a2817;
+    --color-label-pink: #ff6fa2;
+    --color-label-pink-soft: #3b1d2a;
+  }
+}
+
+:root {
+  /* 테두리 두께 */
+  --border-focus: 2px;
+}
+
+/* 고른 것·입력 중인 칸의 파란 테두리. Figma의 안쪽 선처럼 크기를 바꾸지 않는다 */
+@utility focus-ring {
+  outline: var(--border-focus) solid var(--color-primary);
+  outline-offset: calc(var(--border-focus) * -1);
+}
+
+@layer base {
+  :root {
+    color-scheme: light dark;
+  }
+
+  body {
+    background-color: var(--color-surface-page);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    font-size: var(--text-body-md);
+    line-height: var(--text-body-md--line-height);
+    letter-spacing: var(--text-body-md--letter-spacing);
+    font-weight: var(--text-body-md--font-weight);
+    /* 한글을 단어 중간에서 줄바꿈하지 않음 */
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  /* 아이콘은 글자색을 따른다 */
+  svg {
+    color: inherit;
+  }
+}
