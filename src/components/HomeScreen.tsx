@@ -37,7 +37,7 @@ export function HomeScreen({ today, totalCount, memos }: HomeScreenProps) {
           </h1>
         </header>
 
-        <nav aria-label="분류" className="flex gap-8 overflow-x-auto px-4">
+        <nav aria-label="분류" className="flex gap-8 overflow-x-auto px-4 [scrollbar-width:none]">
           <Chip label="전체" selected={category === null} onClick={() => setCategory(null)} />
           {CATEGORIES.map((name) => (
             <Chip key={name} label={name} selected={category === name} onClick={() => setCategory(name)} />

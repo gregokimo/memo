@@ -2,7 +2,7 @@ import type { MemoLabel } from "@/components/labelColor";
 
 // 아직 저장소가 없어 Figma 시안의 예시 메모를 그대로 씁니다.
 
-export type Category = "업무" | "개인" | "아이디어";
+export type Category = "업무" | "개인" | "아이디어" | "할일";
 
 /** 문단 안의 글. 문자열은 보통 글, { strong }은 굵은 강조 */
 export type RichText = (string | { strong: string })[];
@@ -27,7 +27,7 @@ export type Memo = {
   body: MemoBlock[];
 };
 
-export const CATEGORIES: Category[] = ["업무", "개인", "아이디어"];
+export const CATEGORIES: Category[] = ["업무", "개인", "아이디어", "할일"];
 
 export const TOTAL_MEMO_COUNT = 128;
 
