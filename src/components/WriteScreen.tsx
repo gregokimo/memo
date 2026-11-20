@@ -10,7 +10,8 @@ import { InputField } from "./InputField";
 import { LabelDot } from "./LabelDot";
 import { LABELS } from "./labelColor";
 import { MemoEditor } from "./MemoEditor";
-import { loadDraft, saveDraft, saveMemo, type Draft } from "@/lib/memoStore";
+import { createMemo } from "@/lib/memoApi";
+import { loadDraft, saveDraft, type Draft } from "@/lib/memoStore";
 import { CATEGORIES } from "@/lib/memos";
 import { blocksToPreview, htmlToBlocks } from "@/lib/richText";
 
@@ -34,6 +35,7 @@ function WriteForm({ restoreDraft }: { restoreDraft: boolean }) {
   const [autoSaved, setAutoSaved] = useState(initial !== null);
   const titleRef = useRef<HTMLInputElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const saving = useRef(false);
 
   function update(patch: Partial<Draft>) {
     const next = { ...draft, ...patch };
@@ -45,30 +47,31 @@ function WriteForm({ restoreDraft }: { restoreDraft: boolean }) {
     }, AUTOSAVE_DELAY);
   }
 
-  function save() {
+  async function save() {
     const title = draft.title.trim();
     if (!title) {
       titleRef.current?.focus();
       return;
     }
+    if (saving.current) return; // 두 번 눌러도 한 번만 저장한다
+    saving.current = true;
+
     const root = document.createElement("div");
     root.innerHTML = draft.html;
     const body = htmlToBlocks(root);
 
+    try {
+      await createMemo({ title, preview: blocksToPreview(body), body, category: draft.category, label: draft.label });
+    } catch (error) {
+      saving.current = false;
+      // 저장하지 못하면 쓰던 내용(초안)은 그대로 두고 알린다
+      alert(error instanceof Error ? error.message : "메모를 저장하지 못했어요.");
+      return;
+    }
     clearTimeout(timer.current);
-    saveMemo({
-      id: crypto.randomUUID(),
-      title,
-      preview: blocksToPreview(body),
-      date: "",
-      createdAt: new Date().toISOString(),
-      label: draft.label,
-      category: draft.category,
-      pinned: false,
-      body,
-    });
     saveDraft(null);
     router.push("/");
+    router.refresh();
   }
 
   return (

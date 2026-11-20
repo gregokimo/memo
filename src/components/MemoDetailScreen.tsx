@@ -6,6 +6,7 @@ import { ButtonPrimary } from "./ButtonPrimary";
 import { IconButton } from "./IconButton";
 import { ChevronLeftIcon, MoreIcon, PinIcon, ShareIcon } from "./icons";
 import { MemoBody } from "./MemoBody";
+import { setMemoPinned } from "@/lib/memoApi";
 import type { Memo } from "@/lib/memos";
 
 // Figma: Mobile/Detail (2015:270)
@@ -19,8 +20,18 @@ const createdAtFormat = new Intl.DateTimeFormat("ko-KR", {
 });
 
 export function MemoDetailScreen({ memo }: { memo: Memo }) {
-  // 저장소가 생기기 전까지 고정 여부는 이 화면 안에서만 바뀐다
   const [pinned, setPinned] = useState(memo.pinned);
+
+  // 고정 여부는 바로 화면에 보이고, Supabase에 저장하지 못하면 되돌린다
+  async function togglePinned() {
+    const next = !pinned;
+    setPinned(next);
+    try {
+      await setMemoPinned(memo.id, next);
+    } catch {
+      setPinned(!next);
+    }
+  }
 
   async function share() {
     const data = { title: memo.title, text: memo.preview, url: location.href };
@@ -38,7 +49,7 @@ export function MemoDetailScreen({ memo }: { memo: Memo }) {
           <ChevronLeftIcon size={24} />
         </IconButton>
         <div className="flex">
-          <IconButton label={pinned ? "고정 풀기" : "고정하기"} pressed={pinned} onClick={() => setPinned(!pinned)}>
+          <IconButton label={pinned ? "고정 풀기" : "고정하기"} pressed={pinned} onClick={togglePinned}>
             <PinIcon size={24} />
           </IconButton>
           <IconButton label="공유하기" onClick={share}>

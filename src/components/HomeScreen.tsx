@@ -5,23 +5,21 @@ import { ButtonPrimary } from "./ButtonPrimary";
 import { CardHeader } from "./CardHeader";
 import { Chip } from "./Chip";
 import { MemoItem } from "./MemoItem";
-import { useSavedMemos } from "@/lib/memoStore";
 import { CATEGORIES, type Category, type Memo } from "@/lib/memos";
 
 // Figma: Mobile/Home (2013:390)
 
+/** 홈 목록에 보이는 날짜(오늘, 어제, 10월 28일)를 붙인 메모 */
+export type HomeMemo = Memo & { date: string };
+
 type HomeScreenProps = {
   today: ReactNode;
-  totalCount: number;
-  memos: Memo[];
+  memos: HomeMemo[];
 };
 
-export function HomeScreen({ today, totalCount, memos }: HomeScreenProps) {
+export function HomeScreen({ today, memos }: HomeScreenProps) {
   const [category, setCategory] = useState<Category | null>(null);
-  // 이 브라우저에 저장한 메모를 예시 메모 앞에 붙인다
-  const saved = useSavedMemos() ?? [];
-  const all = [...saved.map((memo) => ({ ...memo, date: memo.date || relativeDate(memo.createdAt) })), ...memos];
-  const visible = category ? all.filter((memo) => memo.category === category) : all;
+  const visible = category ? memos.filter((memo) => memo.category === category) : memos;
   const pinned = visible.filter((memo) => memo.pinned);
   const recent = visible.filter((memo) => !memo.pinned);
 
@@ -33,7 +31,7 @@ export function HomeScreen({ today, totalCount, memos }: HomeScreenProps) {
           <h1 className="text-heading-xl text-text-primary">
             오늘까지 메모를
             <br />
-            <span className="text-primary">{totalCount + saved.length}개</span> 남겼어요
+            <span className="text-primary">{memos.length}개</span> 남겼어요
           </h1>
         </header>
 
@@ -68,12 +66,3 @@ export function HomeScreen({ today, totalCount, memos }: HomeScreenProps) {
   );
 }
 
-/** 오늘, 어제, 그 전은 "10월 28일" */
-function relativeDate(iso: string) {
-  const dayKey = (d: Date) => d.toLocaleDateString("ko-KR", { timeZone: "Asia/Seoul" });
-  const date = new Date(iso);
-  const now = new Date();
-  if (dayKey(date) === dayKey(now)) return "오늘";
-  if (dayKey(date) === dayKey(new Date(now.getTime() - 86_400_000))) return "어제";
-  return date.toLocaleDateString("ko-KR", { month: "long", day: "numeric", timeZone: "Asia/Seoul" });
-}
